@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>learn-mor.se</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		
+		<!-- Le styles -->
+<!-- 		<link href="{{global.site_root}}/library/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
+<!-- 		<link href="{{global.site_root}}/library/bootstrap/addons/FontAwesome/css/font-awesome.css" rel="stylesheet"> -->
+<!-- 		<link href="{{global.site_root}}/templates/css/main.css" rel="stylesheet"> -->
+		
+		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+<!-- 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script> -->
+		<script type="text/javascript" src="morse.js"></script>
+
+	</head>
+	
+	
+	<body>
+	
+	<div id="content" class="container">
+		<h1>Beep!</h1>
+		<input id="input" type="input" />
+
+		<div class="row" id="raw"></div>
+		<div class="row" id="code"></div>
+		<div class="row" id="char"></div>
+	</div> <!-- /#content div -->
+	
+<footer id="footer">
+		<span id="footer_legal">Unless otherwise specified, All content is mine, not yours. Copyright &copy; 2009-{{global.current_year}} Zak Henry</span>
+		<a href="#page_errors" id="page_error_icons" role="button" data-toggle="modal">
+			<span class="count"></span>
+			<i class="icon-exclamation-sign" data-tooltip="Errors on page"></i>
+		</a>
+</footer>
+
+<div class="modal" id="page_errors" tabindex="-1" role="dialog" aria-labelledby="errorLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i></button>
+		<h3 id="errorLabel">Page Errors</h3>
+	</div>
+	<div class="modal-body">
+		<div class="php_errors">
+			<h2>PHP Debug</h2>
+			<ul class="unstyled">
+				<error_list />
+			</ul>
+		</div>
+		<div class="js_errors"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn ptn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+	</div>
+</div>
+
+<div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true" style="display:none;">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove-sign"></i></button>
+		<h3 id="loginLabel">Login</h3>
+	</div>
+	<div class="modal-body">
+		<form class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="login_username">Username</label>
+				<div class="controls">
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-user"></i></span>
+						<input type="text" id="login_username" placeholder="Username" />
+					</div>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="login_password">Password</label>
+				<div class="controls">
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-key"></i></span>
+						<input type="password" id="login_password" placeholder="Password" />
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary submit" aria-hidden="true">Log in</button>
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	</div>
+</div>
+	<!-- javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	
+	</body>
+</html>
