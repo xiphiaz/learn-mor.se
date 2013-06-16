@@ -1,1 +1,4 @@
 lib/
+vendor/
+composer.lock
+composer.phar
