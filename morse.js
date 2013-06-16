@@ -295,18 +295,17 @@ var morse = {
 			morse.listener.lastEvent = timeSinceStart;
 			return timeSinceLast;
 		},
-		startTimeOutTimer: function(){
-
-			timeoutBeats = 15; //timeout after 15 dits of space
+		timeOutTimer: function(timeoutBeats, callback){
 
 			lastEvent = morse.listener.lastEvent;
 
 			setTimeout(function(){
 
 				if (lastEvent < (morse.listener.getTimeSinceStart() - morse.speed*timeoutBeats )){
-					console.log('TIMED OUT');
-					morse.listener.processCodeLog();
-					$('#char').append('<br />');
+					console.log('TIMED OUT ');
+					callback();
+				}else{
+					console.log('event within timeout period, callback not firing')
 				}
 
 			}, morse.speed*timeoutBeats); 
@@ -349,6 +348,10 @@ var morse = {
 			morse.listener.processInput(input);
 		},
 
+		getInputQuality: function(duration, expectedBeats){
+			return (duration - (expectedBeats*morse.speed))/morse.speed + 1;
+		},
+
 		processInput: function(input){
 
 			beep = null;
@@ -361,6 +364,27 @@ var morse = {
 				}else{ 												//more than 2 units assume 3
 					length = 3;
 				}
+
+				// console.log('starting timeOutTimer');
+				// morse.listener.timeOutTimer(5, function(){ //wait 5 beats after last keydown and assume a new char is meant
+				// 	morse.listener.addInput(false, 3, morse.listener.getInputQuality(5*morse.speed, 3), 'callback');
+				// 	// console.log('TIMED OUT CHAR');
+				// 	morse.listener.timeOutTimer(5, function(){ //if 5 more beats elapsed (10 total) assume a space character (7)
+				// 		// console.log('TIMED OUT WORD');
+				// 		morse.listener.addInput(false, 7, morse.listener.getInputQuality(5*morse.speed, 3), 'callback');
+
+				// 		morse.listener.timeOutTimer(5, function(){ //if 7 more beats elapse (15 total) assume a newline
+				// 			// console.log('TIMED OUT LINE');
+				// 			morse.listener.addChar('<br /><br />');
+				// 		});
+				// 	});
+				// });
+
+				morse.listener.timeOutTimer(15, function(){ //if 7 more beats elapse (15 total) assume a newline
+					// console.log('TIMED OUT LINE');
+					morse.listener.processCodeLog();
+					morse.listener.addChar('<br /><br />');
+				});
 
 			}else if (input.event == 'space'){
 				beep = false;
@@ -375,12 +399,11 @@ var morse = {
 				console.log('invalid raw input type')
 			}
 
-			quality = (input.duration - (length*morse.speed))/morse.speed + 1;
-			morse.listener.addInput(beep, length, quality);
+			morse.listener.addInput(beep, length, morse.listener.getInputQuality(input.duration, length), 'regular timing');
 
 		},
 
-		addInput: function(keydown, length, quality){
+		addInput: function(keydown, length, quality, tag){
 
 			input = {};
 
@@ -412,11 +435,10 @@ var morse = {
 						type = ' ';
 					break;
 					default:
-						console.log('invalid length given on key down');
+						console.log('invalid length given on key up');
 					break;
 				}
 
-				morse.listener.startTimeOutTimer();
 			}
 
 			input = {
@@ -434,33 +456,44 @@ var morse = {
 
 				case '~':
 					morse.listener.processCodeLog(); //an end code char recieved, work out the character
+					$('#code').append('~'+(tag == 'callback' ? 'c':'t'));
 				break;
 
 				case ' ':
 					morse.listener.processCodeLog();
-					morse.listener.processCharLog();
+					morse.listener.addChar(' ');
+					$('#code').append('<br />');
 				break;
+
+				case '|':
+				break; //do nothing as we are waiting for the next character
+
 			}
 
 			$('#raw').append('[<strong>' + input.code + '</strong><small>'+input.quality+'</small>]');
 		},
 		processCodeLog: function(){
-			code = morse.listener.codeLog.join('');
-			$('#code').append(code);
+
+			if (morse.listener.codeLog.length>0){
+				code = morse.listener.codeLog.join('');
+				$('#code').append(code);
 
 
 
-			if (morse.mapCodeToChar.hasOwnProperty(code)){
-				character = morse.mapCodeToChar[code];
+				if (morse.mapCodeToChar.hasOwnProperty(code)){
+					character = morse.mapCodeToChar[code];
 
-				$('#char').append(character);
-			}else{
-				console.log('invalid code processed: ['+code+']');
+					morse.listener.addChar(character);
+				}else{
+					console.log('invalid code processed: ['+code+']');
+				}
+				
+				morse.listener.codeLog.length = 0; //truncate array
 			}
 			
-			morse.listener.codeLog.length = 0; //truncate array
-
-			
+		},
+		addChar: function(character){
+			$('#char').append(character);
 		},
 		processCharLog: function(){
 			return 0;
