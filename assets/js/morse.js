@@ -509,29 +509,59 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 		// $('#raw').append('<strong>' + input.code + '</strong><small>'+input.quality+'</small>]');
 
 
-		domFriendlyClass = '';
+		inputTypeClass = '';
+		codeTypeClass = '';
 		switch(input.code){
 			case '.':
-				domFriendlyClass = 'dit';
+				inputTypeClass = 'beep';
+				codeTypeClass = 'dit'
 			break;
 			case '-':
-				domFriendlyClass = 'dah';
+				inputTypeClass = 'beep';
+				codeTypeClass = 'dah';
 			break;
 			case '|':
-				domFriendlyClass = 'cs'; //letter space
+				inputTypeClass = 'space'; //letter space
+				codeTypeClass = 'cs';
 			break;
 			case '~':
-				domFriendlyClass = 'ws'; //word space
+				inputTypeClass = 'space'; //word space
+				codeTypeClass = 'ls';
+			break;
+			case ' ':
+				inputTypeClass = 'space'; //word space
+				codeTypeClass = 'ws';
 			break;
 		}
+
+
 
 		domElem = $('.raw_input.template').clone().removeClass('template');
 
 		quality = input.quality.toFixed(2);
 
-		domElem.addClass(domFriendlyClass);
-		domElem.find('.input').text(input.code);
-		domElem.find('.quality').text(quality);
+		qualityZeroed = 1-quality;
+
+		qualityAbsZeroed = Math.abs(qualityZeroed);
+
+		qualityClass = '';
+		if (qualityAbsZeroed<0.2){
+			qualityClass = 'excellent';
+		}else if (qualityAbsZeroed<0.4){
+			qualityClass = 'good';
+		}else if (qualityAbsZeroed<0.6){
+			qualityClass = 'ok';
+		}else if (qualityAbsZeroed<0.8){
+			qualityClass = 'crap';
+		}else{
+			qualityClass = 'terrible';
+		}
+
+		domElem.addClass(inputTypeClass).find('.input').addClass(codeTypeClass);
+		// domElem.find('.input').html(htmlCode);
+		domElem.find('.quality')/*.text(quality)*/.addClass('quality_'+qualityClass);
+
+		domElem.find('.quality_wrap').css('top', qualityZeroed*25);
 
 		$('#raw').append(domElem);
 	}

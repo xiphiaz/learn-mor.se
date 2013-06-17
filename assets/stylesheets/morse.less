@@ -1,24 +1,151 @@
 
-@heading-color: green;
-@dit-color: red;
-@dah-color: blue;
+@heading-color: 	#9d8565;
+
+@bg-color: 			#111;
+
+@dit-color: 		#6a8b91;
+@dah-color: 		#916a8b;
+@cs-color:			#333;
+@ls-color: 			#444;
+@ws-color: 			#555;
+
+@beepBg: 			#222;
+@spaceBg: 			#252525;
+
+@ditWidth: 			30px;
+
+// nice colors:
+
+	// color: #6a8b91;
+	// color: #9d8565;
+	// color: #6a8b91;
+	// color: #916a8b;
+	// color: #bbb;
+	// color: #6a7191;
+	// color: #918e6a;
+
+@qualityWidth: 		15px;
+@qualityBg: 		red;
+@qualityColor: 		white;
+
+@excellentColor: 	#6A8491;
+@goodColor: 		#6A917E;
+@okColor: 			#77916A;
+@crapColor: 		#918B6A;
+@terribleColor:		#916A6A;
 
 h1{
 	color: @heading-color;
 }
 
-span.raw_input{
+body{
+	background: @bg-color;
+	color: white;
+}
+
+.raw_input{
 	display: inline-block;
+	border-radius: 4px;
 
-	div.quality{
-		font-size: 8px;
+
+	.quality_wrap{
+		display: inline-block;
+		position: relative;
+		height: @ditWidth;
+
+		.quality{
+			font-size: 8px;
+			display: inline-block;
+			width: @qualityWidth;
+			height: @qualityWidth;
+			border-radius: @qualityWidth;
+			// background-color: @qualityBg;
+			position: absolute;
+			top: 50%;
+			margin-top: (-@qualityWidth/2);
+			margin-left: (-@qualityWidth/2);
+			line-height: @qualityWidth;
+			color: @qualityColor;
+			opacity: 0.4;
+		}
+
+		.quality_excellent{
+			background-color: @excellentColor;
+			opacity: 0.2;
+		}
+
+		.quality_good{
+			background-color: @goodColor;
+			opacity: 0.4;
+		}
+
+		.quality_ok{
+			background-color: @okColor;
+			opacity: 0.6;
+		}
+
+		.quality_crap{
+			background-color: @crapColor;
+			opacity: 0.8;
+		}
+		.quality_terrible{
+			background-color: @terribleColor;
+			opacity: 1;
+		}
 	}
 
-	&.dit{
-		color: @dit-color;
+	.code_wrap{
+		text-align: center;
+
+		.input{
+			display: inline-block;
+			font-size: 30px;
+			// border: 1px solid;
+		}
+
+	}
+	
+	&.beep{
+
+		background-color: @beepBg;
+
+		.input{
+			border-radius: @ditWidth;
+		}
+
+		.dit.input{
+			width: @ditWidth;
+			height: @ditWidth;
+			background-color: @dit-color;
+		}
+
+		.dah.input{
+			width: (@ditWidth * 3);
+			height: @ditWidth;
+			background-color: @dah-color;
+		}
 	}
 
-	&.dah{
-		color: @dah-color;
+	
+
+	&.space{
+		background-color: @spaceBg;
+
+		.cs.input{
+			width: (@ditWidth * 1);
+			height: @ditWidth;
+			background-color: @cs-color;
+		}
+		.ls.input{
+			width: (@ditWidth * 3);
+			height: @ditWidth;
+			background-color: @ls-color;
+		}
+		.ws.input{
+			width: (@ditWidth * 7);
+			height: @ditWidth;
+			background-color: @ws-color;
+		}
+
 	}
 }
