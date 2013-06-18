@@ -7,19 +7,17 @@
 		<meta name="description" content="">
 		<meta name="author" content="">
 		
-		<!-- Le styles -->
-<!-- 		<link href="{{global.site_root}}/library/bootstrap/css/bootstrap.css" rel="stylesheet"> -->
+		<!-- styles -->
+		<link href="/vendor/twitter/bootstrap/less/bootstrap.less" rel="stylesheet">
 <!-- 		<link href="{{global.site_root}}/library/bootstrap/addons/FontAwesome/css/font-awesome.css" rel="stylesheet"> -->
-<!-- 		<link href="{{global.site_root}}/templates/css/main.css" rel="stylesheet"> -->
 		
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 
-		<script type="text/javascript" src="/vendor/jquery/jquery.min.js"></script>
-<!-- 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script> -->
-		<script type="text/javascript" src="/assets/js/morse.js"></script>
+
+		
 
 		<link rel="stylesheet" href="/assets/stylesheets/morse.less" />
 
@@ -36,15 +34,19 @@
 		<div class="row" id="code"></div>
 		<div class="row" id="char"></div>
 
-		<span class="raw_input template">
-			<div class="code_wrap">
-				<span class="input">
-					<div class="quality_wrap">
-						<span class="quality"></span>
+		<div class="characters template">
+			<span class="raw_input">
+					<div class="code_wrap">
+						<span class="input">
+							<div class="quality_wrap">
+								<span class="quality"></span>
+							</div>
+						</span>
 					</div>
-				</span>
-			</div>
-		</span>
+				
+			</span>
+			<span class="character">?</span>
+		</div>
 	</div> <!-- /#content div -->
 	
 <footer id="footer">
@@ -109,8 +111,7 @@
 	<!-- javascript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-
-	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/vendor/jquery/jquery/jquery-1.10.0.min.js, /assets/js/morse.js"></script>
 	
 	</body>
 </html>

@@ -494,6 +494,7 @@ var morse = {
 		},
 		addChar: function(character){
 			$('#char').append(character);
+			morseDisplay.addChar(character);
 		},
 		processCharLog: function(){
 			return 0;
@@ -536,7 +537,12 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 
 
 
-		domElem = $('.raw_input.template').clone().removeClass('template');
+		domElem = $('.characters.template .raw_input').clone();
+
+
+		if ($('#raw .characters').length == 0 || $('#raw .characters').last().hasClass('decoded')){
+			$('#raw').append($('.characters.template').clone().removeClass('template')); //create a new char wrapper for the next (or first) input
+		}
 
 		quality = input.quality.toFixed(2);
 
@@ -563,7 +569,10 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 
 		domElem.find('.quality_wrap').css('top', qualityZeroed*25);
 
-		$('#raw').append(domElem);
+		$('#raw .characters').last().append(domElem);
+	},
+	addChar: function(character){
+		$('#raw .characters').last().addClass('decoded').find('.character').text(character); //fill existing character
 	}
 }
 
