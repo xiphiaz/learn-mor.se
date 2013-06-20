@@ -34,6 +34,8 @@
 @crapColor: 		#918B6A;
 @terribleColor:		#916A6A;
 
+@characterColor: 	#222;
+
 h1{
 	color: @heading-color;
 }
@@ -43,109 +45,132 @@ body{
 	color: white;
 }
 
-.raw_input{
-	display: inline-block;
-	// border-radius: 4px;
+#raw{
+	.characters{
 
-
-	.quality_wrap{
 		display: inline-block;
-		position: relative;
-		height: @ditWidth;
+		margin: @ditWidth/4 @ditWidth/2;
 
-		.quality{
-			font-size: 8px;
-			display: inline-block;
-			width: @qualityWidth;
-			height: @qualityWidth;
-			border-radius: @qualityWidth;
-			// background-color: @qualityBg;
-			position: absolute;
-			top: 50%;
-			margin-top: (-@qualityWidth/2);
-			margin-left: (-@qualityWidth/2);
-			line-height: @qualityWidth;
-			color: @qualityColor;
-			opacity: 0.4;
+		.character{
+			width: 100%;
+			display: block;
+			background-color: @characterColor;
+			border-radius: 0px 0px 10px 10px;
+			text-align: center;
 		}
 
-		.quality_excellent{
-			background-color: @excellentColor;
-			opacity: 0.2;
+		.inputs{
+
+			width: 100%;
+			display: block;
+
+			.raw_input{
+				display: inline-block;
+				// border-radius: 4px;
+
+
+				.quality_wrap{
+					display: inline-block;
+					position: relative;
+					height: @ditWidth;
+
+					.quality{
+						font-size: 8px;
+						display: inline-block;
+						width: @qualityWidth;
+						height: @qualityWidth;
+						border-radius: @qualityWidth;
+						// background-color: @qualityBg;
+						position: absolute;
+						top: 50%;
+						margin-top: (-@qualityWidth/2);
+						margin-left: (-@qualityWidth/2);
+						line-height: @qualityWidth;
+						color: @qualityColor;
+						opacity: 0.4;
+					}
+
+					.quality_excellent{
+						background-color: @excellentColor;
+						opacity: 0.2;
+					}
+
+					.quality_good{
+						background-color: @goodColor;
+						opacity: 0.4;
+					}
+
+					.quality_ok{
+						background-color: @okColor;
+						opacity: 0.6;
+					}
+
+					.quality_crap{
+						background-color: @crapColor;
+						opacity: 0.8;
+					}
+					.quality_terrible{
+						background-color: @terribleColor;
+						opacity: 1;
+					}
+				}
+
+				.code_wrap{
+					text-align: center;
+
+					.input{
+						display: inline-block;
+						font-size: 30px;
+						// border: 1px solid;
+					}
+
+				}
+				
+				&.beep{
+
+					// background-color: @beepBg;
+
+					.input{
+						border-radius: @ditWidth;
+					}
+
+					.dit.input{
+						width: @ditWidth;
+						height: @ditWidth;
+						background-color: @dit-color;
+					}
+
+					.dah.input{
+						width: (@ditWidth * 3);
+						height: @ditWidth;
+						background-color: @dah-color;
+					}
+				}
+
+				
+
+				&.space{
+					// background-color: @spaceBg;
+
+					.cs.input{
+						width: (@ditWidth * 1);
+						height: @ditWidth;
+						background-color: @cs-color;
+					}
+					.ls.input{
+						width: (@ditWidth * 3);
+						height: @ditWidth;
+						background-color: @ls-color;
+					}
+					.ws.input{
+						width: (@ditWidth * 7);
+						height: @ditWidth;
+						background-color: @ws-color;
+					}
+
+				}
+			}
 		}
-
-		.quality_good{
-			background-color: @goodColor;
-			opacity: 0.4;
-		}
-
-		.quality_ok{
-			background-color: @okColor;
-			opacity: 0.6;
-		}
-
-		.quality_crap{
-			background-color: @crapColor;
-			opacity: 0.8;
-		}
-		.quality_terrible{
-			background-color: @terribleColor;
-			opacity: 1;
-		}
-	}
-
-	.code_wrap{
-		text-align: center;
-
-		.input{
-			display: inline-block;
-			font-size: 30px;
-			// border: 1px solid;
-		}
-
-	}
-	
-	&.beep{
-
-		// background-color: @beepBg;
-
-		.input{
-			border-radius: @ditWidth;
-		}
-
-		.dit.input{
-			width: @ditWidth;
-			height: @ditWidth;
-			background-color: @dit-color;
-		}
-
-		.dah.input{
-			width: (@ditWidth * 3);
-			height: @ditWidth;
-			background-color: @dah-color;
-		}
-	}
-
-	
-
-	&.space{
-		// background-color: @spaceBg;
-
-		.cs.input{
-			width: (@ditWidth * 1);
-			height: @ditWidth;
-			background-color: @cs-color;
-		}
-		.ls.input{
-			width: (@ditWidth * 3);
-			height: @ditWidth;
-			background-color: @ls-color;
-		}
-		.ws.input{
-			width: (@ditWidth * 7);
-			height: @ditWidth;
-			background-color: @ws-color;
-		}
-
+		
 	}
 }
