@@ -72,8 +72,8 @@ var morse = {
 		'"': '.-..-.',
 		'$': '...-..-',
 		'@': '.--.-.',
-		'|': '|', //separation char is of length 3
-		' ': '~' //space is 7 units long
+		'~': '~', //separation char is of length 3
+		' ': ' ' //space is 7 units long
 	},
 	mapCodeToChar: {
 		'.-': 		'a',
@@ -146,7 +146,8 @@ var morse = {
 			
 			var space = {
 				length: 1,
-				on: false
+				on: false,
+				code: '|'
 			}
 			
 			for (i=0; i<dahdits.length; i++){
@@ -161,21 +162,23 @@ var morse = {
 						length = 3;
 						on = true;
 					break;
-					case '|':
+					case '~':
 						length = 3;
 						on = false;
 					break;
-					case '~':
+					case ' ':
 						length = 7;
 						on = false;
 					break;
 				}
 				instruction = {
 					length: length,
-					on: on
+					on: on,
+					code: dahdits[i]
 				}
 				
 	/* 			console.log(dahdits[i], '=>', length, on); */
+
 				
 				morse.player.queue.push(instruction);
 				
@@ -183,9 +186,9 @@ var morse = {
 				if (i<dahdits.length-1 && on)	morse.player.queue.push(space);
 			}
 		},
-		playCode: function(code, callback){
+		playCode: function(code, callback, display){
 			
-			morse.player.queueChar(code);
+			morse.player.queueChar(code, display);
 			
 			
 	 		// console.log(morse.player.queue); 
@@ -193,9 +196,9 @@ var morse = {
 			morse.player.processQueue(function(){
 	/* 			console.log('playchar complete'); */
 				callback();
-			});
+			}, display);
 		},
-		processQueue: function(callback){
+		processQueue: function(callback, display){
 		
 			if (morse.player.queue.length == 0){
 	/* 			console.log('empty queue tried to process'); */
@@ -206,7 +209,7 @@ var morse = {
 				
 				var finished = function(){
 					if (morse.player.queue.length>0){
-						morse.player.processQueue(callback);
+						morse.player.processQueue(callback, display);
 					}else{
 	/* 					console.log('queue complete'); */
 						if (typeof callback == 'function'){
@@ -220,6 +223,17 @@ var morse = {
 				}else{
 					morse.player.space(nextUp.length, finished);
 				}
+
+
+				if (display){
+					morseDisplay.addRawInput({
+						code: nextUp.code,
+						quality: 1
+					});
+
+					console.log('code for display', nextUp.code);
+				}
+
 			} 
 			
 			
@@ -242,21 +256,21 @@ var morse = {
 	            callback();
 	        }, duration);
 	    },
-	    playPhrase: function(phrase){
+	    playPhrase: function(phrase, display){
 		    letters = phrase.toLowerCase().split('');
 		    
 	/* 	    console.log('letters:', letters); */
 		    
 		    for (i=0; i<letters.length; i++){
 			    morse.player.characterQueue.push(letters[i]);
-			    if (i<letters.length-1)	morse.player.characterQueue.push('|'); //special char for separation of characters
+			    if (i<letters.length-1)	morse.player.characterQueue.push('~'); //special char for separation of characters
 		    }
 		    
 		    console.log(morse.player.characterQueue);
 		    
-		    morse.player.processCharacterQueue();
+		    morse.player.processCharacterQueue(null, display);
 	    },
-	    processCharacterQueue: function(callback){
+	    processCharacterQueue: function(callback, display){
 		    
 		    if (morse.player.characterQueue.length == 0){
 	/* 			console.log('empty queue tried to process'); */
@@ -267,17 +281,24 @@ var morse = {
 	/* 			console.log('remaining:', morse.player.characterQueue); */
 				
 				var finished = function(){
+
+					if (display){
+						morseDisplay.setDecodedChar(nextUpChar);
+					}
+
 					if (morse.player.characterQueue.length>0){
-						morse.player.processCharacterQueue(callback);
+						morse.player.processCharacterQueue(callback, display);
 					}else{
 	/* 					console.log('character queue complete'); */
 						if (typeof callback == 'function'){
 							callback();
 						}
 					}
+
+					
 				}
 				
-				morse.player.playCode(nextUpChar, finished);
+				morse.player.playCode(nextUpChar, finished, display);
 			}
 	    }
 		
@@ -383,7 +404,7 @@ var morse = {
 				morse.listener.timeOutTimer(15, function(){ //if 7 more beats elapse (15 total) assume a newline
 					// console.log('TIMED OUT LINE');
 					morse.listener.processCodeLog();
-					morse.listener.addChar('<br /><br />');
+					// morse.listener.addChar('<br /><br />');
 				});
 
 			}else if (input.event == 'space'){
@@ -461,7 +482,7 @@ var morse = {
 
 				case ' ':
 					morse.listener.processCodeLog();
-					morse.listener.addChar(' ');
+					morse.listener.addChar('__');
 					$('#code').append('<br />');
 				break;
 
@@ -486,6 +507,7 @@ var morse = {
 					morse.listener.addChar(character);
 				}else{
 					console.log('invalid code processed: ['+code+']');
+					morse.listener.addChar(false);
 				}
 				
 				morse.listener.codeLog.length = 0; //truncate array
@@ -494,7 +516,7 @@ var morse = {
 		},
 		addChar: function(character){
 			$('#char').append(character);
-			morseDisplay.addChar(character);
+			morseDisplay.setDecodedChar(character);
 		},
 		processCharLog: function(){
 			return 0;
@@ -506,12 +528,27 @@ var morse = {
 
 
 var morseDisplay = { //this is a 'view-controller' object, to separate view logic from the main morse object.
+
+	drawString: function(string){
+
+		var chars = string.split('');
+
+		$.each(chars, function(index, character){
+
+			code = morse.player.getChar(character);
+			code
+
+		});
+
+	},
+
 	addRawInput: function (input){
 		// $('#raw').append('<strong>' + input.code + '</strong><small>'+input.quality+'</small>]');
 
 
 		inputTypeClass = '';
 		codeTypeClass = '';
+		inCode = true;
 		switch(input.code){
 			case '.':
 				inputTypeClass = 'beep';
@@ -528,10 +565,12 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 			case '~':
 				inputTypeClass = 'space'; //word space
 				codeTypeClass = 'ls';
+				inCode = false; //the input is not within a code block
 			break;
 			case ' ':
 				inputTypeClass = 'space'; //word space
 				codeTypeClass = 'ws';
+				inCode = false; //the input is not within a code block
 			break;
 		}
 
@@ -540,9 +579,19 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 		domElem = $('.characters.template .raw_input').clone();
 
 
-		if ($('#raw .characters').length == 0 || $('#raw .characters').last().hasClass('decoded')){
-			$('#raw').append($('.characters.template').clone().removeClass('template')); //create a new char wrapper for the next (or first) input
+
+
+		if ($('#raw .characters').length == 0 || $('#raw .characters').last().hasClass('decoded') || $('#raw .characters').last().hasClass('charspace')){
+			$('#raw').append($('.characters.template').clone().removeClass('template')); //create a new char wrapper for the next (or first, or charspace) input
 		}
+
+		if(!inCode){
+			$('#raw .characters').last().addClass('charspace');
+			morseDisplay.setDecodedChar('_');
+			console.log('charspace')
+		}
+
+
 
 		quality = input.quality.toFixed(2);
 
@@ -569,10 +618,16 @@ var morseDisplay = { //this is a 'view-controller' object, to separate view logi
 
 		domElem.find('.quality_wrap').css('top', qualityZeroed*25);
 
-		$('#raw .characters').last().append(domElem);
+		$('#raw .characters').last().find('.inputs').append(domElem);
 	},
-	addChar: function(character){
-		$('#raw .characters').last().addClass('decoded').find('.character').text(character); //fill existing character
+
+	setDecodedChar: function(character){
+		if (character == false){
+			$('#raw .characters').last().addClass('decoded').find('.character').text('Invalid code'); //fill existing character
+		}else{
+			$('#raw .characters').last().addClass('decoded').find('.character').text(character); //fill existing character
+		}
+		
 	}
 }
 
@@ -587,7 +642,7 @@ $(document).ready(function() {
 	document.onkeyup = morse.listener.keyUp;
 	
 	$('body').mouseup(function(){
-		morse.player.playPhrase(window.getSelection().toString());
+		morse.player.playPhrase(window.getSelection().toString(), true);
 	});
   
 });
